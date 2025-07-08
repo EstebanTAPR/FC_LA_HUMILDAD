@@ -32,4 +32,26 @@ class User
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+public function existeUsuario($nombre, $correo)
+{
+    $sql = "SELECT COUNT(*) FROM user WHERE nombre_juego = :nombre OR correo_electronico = :correo";
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([
+        ':nombre' => $nombre,
+        ':correo' => $correo
+    ]);
+
+    return $stmt->fetchColumn() > 0;
+}
+public function guardarToken($idUsuario, $token)
+{
+    $sql = "UPDATE user SET token = :token WHERE id_usuario = :id";
+    $stmt = $this->conexion->prepare($sql);
+    return $stmt->execute([
+        ':token' => $token,
+        ':id'    => $idUsuario
+    ]);
+}
+
+
 }

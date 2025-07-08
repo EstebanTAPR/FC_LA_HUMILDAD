@@ -83,3 +83,10 @@ h2 {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   color: white;
 }
+#tituloUsuario {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 20px 0 0 30px;
+  color: #333;
+}

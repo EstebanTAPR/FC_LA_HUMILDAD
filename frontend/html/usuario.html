@@ -11,6 +11,9 @@
 <body>
   <div class="dashboard">
     <aside class="sidebar">
+      <div class="perfil-usuario">
+        <img id="fotoPerfil" src="" alt="Foto perfil" style="width: 80px; border-radius: 50%; margin: 10px auto;" />
+      </div>
       <h2 class="logo">⚽ DASHBOARD</h2>
       <ul class="nav">
         <li><a href="#">🏠 Inicio</a></li>
@@ -25,6 +28,8 @@
     </aside>
 
     <main class="main-content">
+      <h2 id="tituloUsuario">Bienvenido, </h2> <!-- Nuevo título debajo de DASHBOARD -->
+
       <section class="skills">
         <h2>Anuncios</h2>
         <div class="cards">
@@ -44,5 +49,23 @@
       </section>
     </main>
   </div>
+
+  <script>
+    // Verifica si el token existe
+    const token = localStorage.getItem('token');
+    const nombre = localStorage.getItem('nombre');
+    const foto = localStorage.getItem('foto');
+
+    if (!token || !nombre) {
+      window.location.href = '../html/login.html';
+    }
+
+    // Mostrar nombre del usuario
+    document.querySelector('.logo').textContent = `⚽ DASHBOARD`;
+    document.getElementById('tituloUsuario').textContent = `Bienvenido, ${nombre}`;
+
+    // Mostrar foto de perfil
+    document.getElementById('fotoPerfil').src = `../../uploads/${foto}`;
+  </script>
 </body>
 </html>

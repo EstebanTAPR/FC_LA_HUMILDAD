@@ -1,7 +1,8 @@
 <?php
-session_start();
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../config/conexion.php';
+
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = $_POST['email'];
@@ -11,22 +12,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = $userModel->buscarPorCorreo($correo);
 
     if ($usuario && password_verify($clave, $usuario['contrasena'])) {
-    session_start();
-    $_SESSION['usuario_id'] = $usuario['id'];
-    $_SESSION['nombre'] = $usuario['nombre_juego'];
-    $_SESSION['rol'] = $usuario['id_rol'];
-    $_SESSION['foto'] = $usuario['foto_perfil'];
+        // Generar token simple (puedes mejorarlo usando JWT luego)
+        $token = bin2hex(random_bytes(32));
 
-    // Redirigir según el rol
-    if ($usuario['id_rol'] == 1) {
-        header('Location: ../frontend/html/admin.html');
+        // Guardar en base de datos si quieres persistencia
+        // (opcional: añade una columna 'token' en tu tabla user)
+$userModel->guardarToken($usuario['id_usuario'], $token);
+
+        // Responder al frontend con info
+        echo json_encode([
+            'status' => 'success',
+            'token' => $token,
+            'usuario' => [
+                'id' => $usuario['id_usuario'],
+                'nombre' => $usuario['nombre_juego'],
+                'rol' => $usuario['id_rol'],
+                'foto' => $usuario['foto_perfil']
+            ]
+        ]);
     } else {
-        header('Location: ../frontend/html/usuario.html'); // <- Este es el correcto
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Credenciales inválidas'
+        ]);
     }
-    exit;
-} else {
-    header('Location: ../frontend/html/login.html?error=1');
-    exit;
-}
-
 }

@@ -8,10 +8,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $clave   = $_POST['password'];
     $foto    = $_FILES['foto'];
 
-    // Establecer el rol por defecto: 2 = Usuario
-    $rolPorDefecto = 2;
+    $rolPorDefecto = 2; // Usuario
 
-    // Validar y mover la imagen
+    $user = new User($conexion);
+
+    // Verificar si ya existe un usuario con ese nombre o correo
+    if ($user->existeUsuario($nombre, $correo)) {
+        header('Location: ../frontend/html/register.html?error=duplicado');
+        exit;
+    }
+
+    // Validar y mover imagen
     $fotoNombre = 'default.png';
     $carpetaDestino = __DIR__ . '/../uploads/';
 
@@ -21,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($foto['tmp_name'], $carpetaDestino . $fotoNombre);
     }
 
-    $user = new User($conexion);
+    // Registrar usuario
     $registro = $user->registrar($nombre, $correo, $clave, $fotoNombre, $rolPorDefecto);
 
     if ($registro) {
