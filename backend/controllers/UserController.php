@@ -28,12 +28,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($foto['tmp_name'], $carpetaDestino . $fotoNombre);
     }
 
-    // Registrar usuario
-    $registro = $user->registrar($nombre, $correo, $clave, $fotoNombre, $rolPorDefecto);
+// Registrar usuario
+$idUsuario = $user->registrar($nombre, $correo, $clave, $fotoNombre, $rolPorDefecto);
 
-    if ($registro) {
-        header('Location: ../frontend/html/login.html?registro=ok');
-    } else {
-        header('Location: ../frontend/html/register.html?error=1');
-    }
+if ($idUsuario) {
+    // Insertar monedas con cantidad 0
+    $sqlMonedas = "INSERT INTO monedas (id_user, cantidad) VALUES (:id_user, 0)";
+    $stmtMonedas = $conexion->prepare($sqlMonedas);
+    $stmtMonedas->execute([':id_user' => $idUsuario]);
+
+    header('Location: ../../index.html?registro=ok');
+} else {
+    header('Location: ../frontend/html/register.html?error=1');
+}
+
 }

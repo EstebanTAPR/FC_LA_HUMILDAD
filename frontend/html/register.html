@@ -10,7 +10,7 @@
   <div class="container">
     <div class="form-container">
       <h2>Sign Up to FC La Humildad</h2>
-      <form action="../../backend/register.php" method="POST" enctype="multipart/form-data">
+      <form id="formRegister" enctype="multipart/form-data">
         <label for="nombre">Nombre en el juego</label>
         <input type="text" name="nombre" required />
 
@@ -25,7 +25,7 @@
 
         <button type="submit">Registrarse</button>
 
-        <p class="login-link">¿Ya tienes cuenta? <a href="login.html">Iniciar sesión</a></p>
+        <p class="login-link">¿Ya tienes cuenta? <a href="../../index.html">Iniciar sesión</a></p>
       </form>
     </div>
     <div class="image-container">
@@ -34,46 +34,67 @@
   </div>
 
 <script>
+document.getElementById('formRegister').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  fetch('../../backend/register.php', {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => {
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        mostrarModal("Error al registrar el usuario.");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      mostrarModal('Ocurrió un error al registrar.');
+    });
+});
+
 document.addEventListener("DOMContentLoaded", function () {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("error") === "duplicado") {
-        mostrarModal("Este usuario ya está registrado. Usa otro nombre o correo.");
-    }
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("error") === "duplicado") {
+    mostrarModal("Este usuario ya está registrado. Usa otro nombre o correo.");
+  }
 });
 
 function mostrarModal(mensaje) {
-    // Crear el fondo oscuro
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "1000";
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100vw";
+  overlay.style.height = "100vh";
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  overlay.style.display = "flex";
+  overlay.style.alignItems = "center";
+  overlay.style.justifyContent = "center";
+  overlay.style.zIndex = "1000";
 
-    // Crear el modal
-    const modal = document.createElement("div");
-    modal.style.background = "#fff";
-    modal.style.padding = "20px 30px";
-    modal.style.borderRadius = "10px";
-    modal.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
-    modal.style.textAlign = "center";
-    modal.style.maxWidth = "400px";
-    modal.innerHTML = `
-        <h3 style="margin-bottom: 15px; color: #d33;">Error de registro</h3>
-        <p>${mensaje}</p>
-        <button onclick="this.parentElement.parentElement.remove()" 
-                style="margin-top: 20px; padding: 8px 15px; background-color: #d33; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            Cerrar
-        </button>
-    `;
+  const modal = document.createElement("div");
+  modal.style.background = "#fff";
+  modal.style.padding = "20px 30px";
+  modal.style.borderRadius = "10px";
+  modal.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
+  modal.style.textAlign = "center";
+  modal.style.maxWidth = "400px";
+  modal.innerHTML = `
+    <h3 style="margin-bottom: 15px; color: #d33;">Error de registro</h3>
+    <p>${mensaje}</p>
+    <button onclick="this.parentElement.parentElement.remove()" 
+      style="margin-top: 20px; padding: 8px 15px; background-color: #d33; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      Cerrar
+    </button>
+  `;
 
-    overlay.appendChild(modal);
-    document.body.appendChild(overlay);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
 }
 </script>
 </body>

@@ -24,7 +24,7 @@ $userModel->guardarToken($usuario['id_usuario'], $token);
             'status' => 'success',
             'token' => $token,
             'usuario' => [
-                'id' => $usuario['id_usuario'],
+                'id' => $usuario['id'],
                 'nombre' => $usuario['nombre_juego'],
                 'rol' => $usuario['id_rol'],
                 'foto' => $usuario['foto_perfil']
