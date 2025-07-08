@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iniciar sesión - FC La Humildad</title>
-  <link rel="stylesheet" href="frontend/css/auth.css" />
+  <link rel="stylesheet" href="/frontend/css/auth.css" />
 </head>
 <body>
   <div class="container">
     <div class="form-container">
       <h2>Inicia sesión en FC La Humildad</h2>
-      <form action="backend/uploads/login.php" method="POST">
+      <form action="/backend/uploads/login.php" method="POST">
         <label for="email">Correo electrónico</label>
         <input type="email" name="email" required />
 
@@ -19,13 +19,14 @@
 
         <button type="submit">Iniciar sesión</button>
 
-        <p class="login-link">¿No tienes una cuenta? 
-          <a href="frontend/html/register.html">Regístrate</a>
+        <p class="login-link">
+          ¿No tienes una cuenta?
+          <a href="/frontend/html/register.html">Regístrate</a>
         </p>
       </form>
     </div>
     <div class="image-container">
-      <img src="frontend/img/fondologinfc.jpg" alt="background" />
+      <img src="/frontend/img/fondologinfc.jpg" alt="background" />
     </div>
   </div>
 </body>
